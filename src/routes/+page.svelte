@@ -1,5 +1,13 @@
 <script>
 	export let data;
+
+	let search = '';
+	$: filteredMountains =
+		search !== ''
+			? data.mountains.filter((mountain) => {
+					return mountain.name.toLowerCase().includes(search.toLowerCase());
+			  })
+			: data.mountains;
 </script>
 
 <div class="flex flex-col gap-4 flex-grow overflow-hidden items-center">
@@ -8,12 +16,13 @@
 	</h1>
 	<input
 		type="text"
+		bind:value={search}
 		placeholder="Search mountain..."
 		class="input input-bordered w-full max-w-xs"
 	/>
-	<div class="flex flex-wrap gap-4 flex-grow overflow-auto px-7">
-		{#each data.mountains as mountain}
-			<div class="card w-96 bg-base-100 shadow-xl">
+	<div class="flex flex-wrap gap-4 flex-grow overflow-auto px-8 pb-10">
+		{#each filteredMountains as mountain}
+			<a href={`/mountain/${mountain.slug}`} class="card w-96 h-96 bg-base-100 shadow-xl">
 				<figure>
 					<img
 						class="object-cover w-full h-72"
@@ -24,7 +33,7 @@
 				<div class="card-body">
 					<h2 class="card-title">{mountain.name}</h2>
 				</div>
-			</div>
+			</a>
 		{/each}
 	</div>
 </div>
