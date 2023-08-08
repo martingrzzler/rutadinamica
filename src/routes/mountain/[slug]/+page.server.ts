@@ -1,6 +1,4 @@
-import { supabase } from '$lib/db';
-
-export async function load({ params }) {
+export async function load({ locals: { supabase }, params }) {
 	const { slug } = params;
 
 	const { data } = await supabase

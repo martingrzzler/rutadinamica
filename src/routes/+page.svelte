@@ -10,7 +10,7 @@
 			: data.mountains;
 </script>
 
-<div class="flex flex-col gap-4 flex-grow overflow-hidden items-center">
+<div class="flex flex-col gap-4 flex-grow overflow-hidden items-center mt-4">
 	<h1 class="text-center">
 		Find current conditions of the mountains in the Cordillera Blanca posted by fellow climbers.
 	</h1>
