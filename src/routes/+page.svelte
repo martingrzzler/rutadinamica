@@ -18,7 +18,7 @@
 		type="text"
 		bind:value={search}
 		placeholder="Search mountain..."
-		class="input input-bordered w-full max-w-xs"
+		class="input input-bordered w-full py-4 max-w-xs"
 	/>
 	<div class="flex flex-wrap gap-4 flex-grow overflow-auto px-8 pb-10">
 		{#each filteredMountains as mountain}
