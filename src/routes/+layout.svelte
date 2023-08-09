@@ -1,5 +1,4 @@
 <script>
-	import { enhance } from '$app/forms';
 	import '../app.css';
 
 	export let data;
@@ -21,9 +20,7 @@
 					>
 						<li><a href="/profile">Profile</a></li>
 						<li>
-							<form use:enhance action="/signout" method="POST">
-								<button type="submit">Sign out</button>
-							</form>
+							<a href="/signout">Sign out</a>
 						</li>
 					</ul>
 				</div>
