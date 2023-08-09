@@ -2,12 +2,16 @@
 	import { enhance } from '$app/forms';
 
 	export let form;
+
+	let loading = false;
 </script>
 
 <div class="flex flex-col items-center py-10 gap-4 px-7">
-	{#if form?.success}
+	{#if loading}
+		<span class="loading loading-ring loading-lg" />
+	{:else if form?.success}
 		<div class="alert alert-success">
-			Success! {form.message}
+			Success! {form?.message}
 		</div>
 	{:else}
 		{#if form?.error}
@@ -15,7 +19,18 @@
 				{form.error}
 			</div>
 		{/if}
-		<form method="POST" class="flex flex-col items-center gap-4" use:enhance>
+		<form
+			method="POST"
+			class="flex flex-col items-center gap-4"
+			use:enhance={() => {
+				loading = true;
+
+				return async ({ update }) => {
+					await update();
+					loading = false;
+				};
+			}}
+		>
 			<input
 				value={form?.email ?? ''}
 				placeholder="Your Email"
@@ -23,7 +38,7 @@
 				type="email"
 				name="email"
 			/>
-			<button type="submit" class="btn btn-primary">Receive Link</button>
+			<button disabled={loading} type="submit" class="btn btn-primary">Receive Link</button>
 		</form>
 	{/if}
 </div>

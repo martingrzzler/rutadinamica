@@ -22,3 +22,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	});
 };
+
+export function handleError({ error }) {
+	console.error(error);
+}
