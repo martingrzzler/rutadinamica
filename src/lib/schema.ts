@@ -36,6 +36,49 @@ export interface Database {
         }
         Relationships: []
       }
+      posts: {
+        Row: {
+          content: string
+          created_at: string
+          id: number
+          mountain_id: number
+          profile_id: string
+          route: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: number
+          mountain_id: number
+          profile_id: string
+          route: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: number
+          mountain_id?: number
+          profile_id?: string
+          route?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_mountain_id_fkey"
+            columns: ["mountain_id"]
+            referencedRelation: "mountains"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_profile_id_fkey"
+            columns: ["profile_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
