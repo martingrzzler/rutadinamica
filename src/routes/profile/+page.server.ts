@@ -7,11 +7,24 @@ export async function load({ parent, locals: { supabase } }) {
 		throw redirect(303, '/signin');
 	}
 
-	const { data } = await supabase
+	const { data, error } = await supabase
 		.from('profiles')
-		.select('name')
+		.select('name, avatar_url')
 		.eq('id', session.user.id)
 		.single();
+
+	if (error) {
+		return fail(500, { error: 'Server error. Try again later.' });
+	}
+
+	if (data.avatar_url) {
+		return {
+			profile: {
+				name: data.name,
+				avatar_url: supabase.storage.from('images').getPublicUrl(data.avatar_url).data.publicUrl
+			}
+		};
+	}
 
 	return {
 		profile: data
@@ -33,7 +46,28 @@ export const actions: Actions = {
 			return fail(401, { error: 'Not authenticated.' });
 		}
 
-		const { error } = await supabase.from('profiles').update({ name }).eq('id', session.user.id);
+		const avatar = formData.get('avatar') as File | undefined;
+		let avatar_url: string | undefined = undefined;
+
+		if (avatar) {
+			const { error, data } = await supabase.storage
+				.from('images')
+				.upload(`${session.user.id}/avatar`, avatar, {
+					upsert: true
+				});
+
+			if (error) {
+				console.log(error);
+				return fail(500, { error: 'Server error. Try again later.' });
+			}
+
+			avatar_url = data.path;
+		}
+
+		const { error } = await supabase
+			.from('profiles')
+			.update({ name, avatar_url })
+			.eq('id', session.user.id);
 
 		if (error) {
 			return fail(500, { error: 'Server error. Try again later.' });

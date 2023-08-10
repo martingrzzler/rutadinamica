@@ -1,10 +1,29 @@
-<script>
+<script lang="ts">
 	import { enhance } from '$app/forms';
+	import { onMount } from 'svelte';
 
 	export let data;
 	export let form;
 
 	let loading = false;
+	let preloadLink = '';
+	let files: FileList | null = null;
+	let userName = data.profile?.name || '';
+	console.log(data, preloadLink);
+
+	function onFileChange() {
+		if (files?.length === 0) {
+			return;
+		}
+		const file = files![0];
+		preloadLink = URL.createObjectURL(file);
+	}
+
+	onMount(() => {
+		return () => {
+			URL.revokeObjectURL(preloadLink);
+		};
+	});
 </script>
 
 <div class="flex flex-col items-center py-6 px-7 gap-4">
@@ -19,7 +38,15 @@
 			{form?.message}
 		</div>
 	{/if}
-
+	<img
+		class="rounded-xl shadow w-full max-w-sm max-h-96 object-cover"
+		src={preloadLink
+			? preloadLink
+			: data.profile?.avatar_url
+			? data.profile?.avatar_url
+			: 'placeholder-profile.png'}
+		alt="Profile"
+	/>
 	<form
 		class="flex flex-col items-center gap-4"
 		action="?/update"
@@ -27,21 +54,33 @@
 			loading = true;
 
 			return async ({ update }) => {
-				await update();
+				await update({
+					reset: false
+				});
+
 				loading = false;
 			};
 		}}
 		method="POST"
 	>
 		<input
+			type="file"
+			class="file-input w-full file-input-secondary max-w-xs"
+			accept="image/*"
+			name="avatar"
+			bind:files
+			on:change={onFileChange}
 			disabled={loading}
-			value={data.profile.name || ''}
+		/>
+		<input
+			disabled={loading}
 			placeholder="Add your name"
 			class="input w-full max-w-xs"
 			type="text"
 			name="name"
+			bind:value={userName}
 		/>
-		<button class="btn btn-primary min-w-[10rem]">
+		<button class="btn btn-primary min-w-[10rem]" disabled={loading}>
 			{#if loading}
 				<span class="loading loading-ring loading-lg" />
 			{:else}

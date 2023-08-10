@@ -5,8 +5,6 @@
 
 	export let data;
 
-	console.log(data);
-
 	function getUserInitials(name: string): string {
 		const names = name.split(' ');
 
@@ -18,7 +16,7 @@
 	}
 </script>
 
-<div class="px-7 py-4 flex gap-4 flex-col items-center">
+<div class="px-7 py-4 flex gap-4 flex-col items-center flex-grow overflow-hidden">
 	<div>
 		<figure>
 			<img
@@ -36,27 +34,40 @@
 		<div>Post</div>
 		<Add className="w-5 h-5 -translate-y-[1px]" />
 	</a>
-	{#each data.posts as post}
-		<div class="collapse bg-base-100">
-			<input type="checkbox" />
-			<div class="collapse-title flex justify-between items-center px-4">
-				<div class="text-lg font-medium">{post.route}</div>
-				<div class="flex gap-2 items-center">
-					<div class="text-sm">
-						{format(post.updated_at, 'en_US')}
-					</div>
-					<div class="avatar placeholder">
-						<div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-							<span class="text-xs uppercase">{getUserInitials(post.profiles.name)}</span>
+	<div class="flex-grow overflow-auto self-stretch">
+		{#each data.posts as post}
+			<div class="collapse bg-base-100 mt-4">
+				<input type="checkbox" />
+				<div class="collapse-title w-full flex justify-between items-center px-4">
+					<div class="text-lg font-medium">{post.route}</div>
+					<div class="flex gap-2 items-center">
+						<div class="text-sm">
+							{format(post.updated_at, 'en_US')}
+						</div>
+						<div class="avatar placeholder">
+							{#if post.profiles.avatar_url}
+								<div class="w-12 rounded-full">
+									<img
+										class="object-cover"
+										src={post.profiles.avatar_url}
+										alt={post.profiles.name}
+									/>
+								</div>
+							{:else}
+								<div class="bg-neutral-focus text-neutral-content rounded-full w-12">
+									<span class="uppercase">{getUserInitials(post.profiles.name || 'Anonomous')}</span
+									>
+								</div>
+							{/if}
 						</div>
 					</div>
 				</div>
+				<div class="collapse-content">
+					<p class="whitespace-pre-wrap">
+						{post.content}
+					</p>
+				</div>
 			</div>
-			<div class="collapse-content">
-				<p>
-					{post.content}
-				</p>
-			</div>
-		</div>
-	{/each}
+		{/each}
+	</div>
 </div>
