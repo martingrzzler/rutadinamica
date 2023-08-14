@@ -12,6 +12,7 @@ export const actions: Actions = {
 
 		const content = formData.get('content') as string;
 		const route = formData.get('route') as string;
+		const date = formData.get('date') as string;
 
 		if (content.trim() === '') {
 			return fail(400, { error: 'Content cannot be empty' });
@@ -19,6 +20,10 @@ export const actions: Actions = {
 
 		if (route.trim() === '') {
 			return fail(400, { error: 'Route cannot be empty' });
+		}
+
+		if (date.trim() === '' || isNaN(Date.parse(date))) {
+			return fail(400, { error: 'Date cannot be empty' });
 		}
 
 		const slug = params.slug;
@@ -47,7 +52,8 @@ export const actions: Actions = {
 			mountain_id: data.id,
 			profile_id: profile.id,
 			content,
-			route
+			route,
+			date
 		});
 
 		if (error2) {

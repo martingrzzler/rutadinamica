@@ -29,6 +29,15 @@
 		class="input w-full"
 		type="text"
 		name="route"
+		required
+	/>
+	<input
+		disabled={loading}
+		placeholder="When did you climb it?"
+		class="input w-full"
+		type="date"
+		name="date"
+		required
 	/>
 	<textarea
 		disabled={loading}
@@ -36,6 +45,7 @@
 		rows="10"
 		name="content"
 		placeholder="Post your experience"
+		required
 	/>
 	<button class="btn btn-primary min-w-[10rem]">
 		{#if loading}

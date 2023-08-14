@@ -52,7 +52,7 @@ export const actions: Actions = {
 		if (avatar) {
 			const { error, data } = await supabase.storage
 				.from('images')
-				.upload(`${session.user.id}/avatar`, avatar, {
+				.upload(`${session.user.id}/avatar.${avatar.name.split('.').at(-1)}`, avatar, {
 					upsert: true
 				});
 

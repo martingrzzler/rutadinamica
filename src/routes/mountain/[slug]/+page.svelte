@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page, updated } from '$app/stores';
 	import Add from '$lib/icons/Add.svelte';
+	import Summit from '$lib/icons/Summit.svelte';
 	import { format } from 'timeago.js';
 
 	export let data;
@@ -63,6 +64,10 @@
 					</div>
 				</div>
 				<div class="collapse-content">
+					<div class="flex gap-2 mb-3 text-gray-600">
+						<Summit className="w-5 h-5 fill-gray-600" />
+						<p>{format(post.date, 'en_US')}</p>
+					</div>
 					<p class="whitespace-pre-wrap">
 						{post.content}
 					</p>

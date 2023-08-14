@@ -5,6 +5,7 @@ interface Post {
 	content: string;
 	route: string;
 	updated_at: string;
+	date: string;
 	profiles: {
 		name?: string;
 		avatar_url?: string;
@@ -32,6 +33,7 @@ export async function load({ locals: { supabase }, params }) {
 		content,
 		route,
 		updated_at,
+		date,
 		profiles (
 			name,
 			avatar_url
