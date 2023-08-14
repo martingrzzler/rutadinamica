@@ -6,6 +6,7 @@ interface Post {
 	route: string;
 	updated_at: string;
 	date: string;
+	image_url?: string;
 	profiles: {
 		name?: string;
 		avatar_url?: string;
@@ -34,6 +35,7 @@ export async function load({ locals: { supabase }, params }) {
 		route,
 		updated_at,
 		date,
+		image_url,
 		profiles (
 			name,
 			avatar_url
@@ -50,26 +52,38 @@ export async function load({ locals: { supabase }, params }) {
 	}
 
 	const postsWithPublicUrl = posts.map((post: Post) => {
-		if (!post.profiles.avatar_url) {
-			return post;
+		let avatar_url;
+		let image_url;
+
+		if (post.profiles.avatar_url) {
+			const {
+				data: { publicUrl }
+			} = supabase.storage.from('images').getPublicUrl(post.profiles.avatar_url);
+
+			avatar_url = publicUrl;
 		}
-		const {
-			data: { publicUrl }
-		} = supabase.storage.from('images').getPublicUrl(post.profiles.avatar_url);
+
+		console.log(post.image_url);
+		if (post.image_url) {
+			const {
+				data: { publicUrl }
+			} = supabase.storage.from('images').getPublicUrl(post.image_url);
+
+			image_url = publicUrl;
+		}
 
 		return {
 			...post,
+			image_url,
 			profiles: {
 				...post.profiles,
-				avatar_url: publicUrl
+				avatar_url
 			}
 		};
 	});
 
 	return {
 		mountain,
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		posts: postsWithPublicUrl
 	};
 }

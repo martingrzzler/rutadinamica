@@ -13,6 +13,7 @@ export const actions: Actions = {
 		const content = formData.get('content') as string;
 		const route = formData.get('route') as string;
 		const date = formData.get('date') as string;
+		const image = formData.get('image') as File;
 
 		if (content.trim() === '') {
 			return fail(400, { error: 'Content cannot be empty' });
@@ -28,9 +29,9 @@ export const actions: Actions = {
 
 		const slug = params.slug;
 
-		const { data, error } = await supabase
+		const { data: mountain, error } = await supabase
 			.from('mountains')
-			.select('id, name, slug, cover_image_url')
+			.select('id')
 			.eq('slug', slug)
 			.single();
 
@@ -48,12 +49,28 @@ export const actions: Actions = {
 			return fail(401, { error: 'Unauthorized' });
 		}
 
+		let image_url: string | undefined = undefined;
+
+		if (image) {
+			const { error, data } = await supabase.storage
+				.from('images')
+				.upload(`${session.user.id}/${image.name}`, image);
+
+			if (error) {
+				console.log(error);
+				return fail(500, { error: 'Server error. Try again later.' });
+			}
+
+			image_url = data.path;
+		}
+
 		const { error: error2 } = await supabase.from('posts').insert({
-			mountain_id: data.id,
+			mountain_id: mountain.id,
 			profile_id: profile.id,
 			content,
 			route,
-			date
+			date,
+			image_url
 		});
 
 		if (error2) {

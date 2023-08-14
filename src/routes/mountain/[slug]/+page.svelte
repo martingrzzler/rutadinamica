@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page, updated } from '$app/stores';
+	import { page } from '$app/stores';
 	import Add from '$lib/icons/Add.svelte';
 	import Summit from '$lib/icons/Summit.svelte';
 	import { format } from 'timeago.js';
@@ -18,15 +18,6 @@
 </script>
 
 <div class="px-7 py-4 flex gap-4 flex-col items-center flex-grow overflow-hidden">
-	<div>
-		<figure>
-			<img
-				class="object-cover w-full h-52 rounded-xl shadow"
-				src={data.mountain.cover_image_url}
-				alt={`Mountain ${data.mountain.name}`}
-			/>
-		</figure>
-	</div>
 	<h2 class="card-title">{data.mountain.name}</h2>
 	<a
 		href={$page.url.pathname + '/post'}
@@ -68,6 +59,13 @@
 						<Summit className="w-5 h-5 fill-gray-600" />
 						<p>{format(post.date, 'en_US')}</p>
 					</div>
+					{#if post.image_url}
+						<img
+							class="rounded-xl mb-3 shadow w-full max-w-sm max-h-96 object-cover"
+							src={post.image_url}
+							alt="Post"
+						/>
+					{/if}
 					<p class="whitespace-pre-wrap">
 						{post.content}
 					</p>

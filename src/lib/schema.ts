@@ -40,7 +40,9 @@ export interface Database {
         Row: {
           content: string
           created_at: string
+          date: string
           id: number
+          image_url: string | null
           mountain_id: number
           profile_id: string
           route: string
@@ -49,7 +51,9 @@ export interface Database {
         Insert: {
           content: string
           created_at?: string
+          date: string
           id?: number
+          image_url?: string | null
           mountain_id: number
           profile_id: string
           route: string
@@ -58,7 +62,9 @@ export interface Database {
         Update: {
           content?: string
           created_at?: string
+          date?: string
           id?: number
+          image_url?: string | null
           mountain_id?: number
           profile_id?: string
           route?: string

@@ -9,7 +9,6 @@
 	let preloadLink = '';
 	let files: FileList | null = null;
 	let userName = data.profile?.name || '';
-	console.log(data, preloadLink);
 
 	function onFileChange() {
 		if (files?.length === 0) {
