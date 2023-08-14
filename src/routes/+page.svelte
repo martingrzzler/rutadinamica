@@ -18,11 +18,11 @@
 		type="text"
 		bind:value={search}
 		placeholder="Search mountain..."
-		class="input input-bordered w-full py-4 max-w-xs"
+		class="input input-bordered w-full shrink-0 max-w-xs"
 	/>
-	<div class="flex flex-wrap gap-4 flex-grow overflow-auto px-8 pb-10">
+	<div class="flex flex-wrap gap-4 flex-grow overflow-auto px-4 pb-10">
 		{#each filteredMountains as mountain}
-			<a href={`/mountain/${mountain.slug}`} class="card w-96 h-96 bg-base-100 shadow-xl">
+			<a href={`/mountain/${mountain.slug}`} class="card w-full h-96 bg-base-100 shadow-xl">
 				<figure>
 					<img
 						class="object-cover w-full h-72"
