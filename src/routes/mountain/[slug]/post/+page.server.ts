@@ -51,7 +51,7 @@ export const actions: Actions = {
 
 		let image_url: string | undefined = undefined;
 
-		if (image) {
+		if (image?.size) {
 			const { error, data } = await supabase.storage
 				.from('images')
 				.upload(`${session.user.id}/${image.name}`, image);

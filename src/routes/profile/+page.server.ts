@@ -9,7 +9,7 @@ export async function load({ parent, locals: { supabase } }) {
 
 	const { data, error } = await supabase
 		.from('profiles')
-		.select('name, avatar_url')
+		.select('name, avatar_url, whatsapp')
 		.eq('id', session.user.id)
 		.single();
 
@@ -21,6 +21,7 @@ export async function load({ parent, locals: { supabase } }) {
 		return {
 			profile: {
 				name: data.name,
+				whatsapp: data.whatsapp,
 				avatar_url: supabase.storage.from('images').getPublicUrl(data.avatar_url).data.publicUrl
 			}
 		};
@@ -35,6 +36,7 @@ export const actions: Actions = {
 	update: async ({ request, locals: { supabase, getSession } }) => {
 		const formData = await request.formData();
 		const name = formData.get('name') as string;
+		const whatsapp = formData.get('whatsapp') as string;
 
 		if (!name.trim()) {
 			return fail(400, { error: 'Name cannot be empty.' });
@@ -49,7 +51,7 @@ export const actions: Actions = {
 		const avatar = formData.get('avatar') as File | undefined;
 		let avatar_url: string | undefined = undefined;
 
-		if (avatar) {
+		if (avatar?.size) {
 			const { error, data } = await supabase.storage
 				.from('images')
 				.upload(`${session.user.id}/avatar.${avatar.name.split('.').at(-1)}`, avatar, {
@@ -66,7 +68,7 @@ export const actions: Actions = {
 
 		const { error } = await supabase
 			.from('profiles')
-			.update({ name, avatar_url })
+			.update({ name, avatar_url, whatsapp })
 			.eq('id', session.user.id);
 
 		if (error) {

@@ -9,6 +9,7 @@
 	let preloadLink = '';
 	let files: FileList | null = null;
 	let userName = data.profile?.name || '';
+	let whatsapp = data.profile?.whatsapp || '';
 
 	function onFileChange() {
 		if (files?.length === 0) {
@@ -78,6 +79,14 @@
 			type="text"
 			name="name"
 			bind:value={userName}
+		/>
+		<input
+			disabled={loading}
+			placeholder="WhatsApp number (optional)"
+			class="input w-full max-w-xs"
+			type="text"
+			name="whatsapp"
+			bind:value={whatsapp}
 		/>
 		<button class="btn btn-primary min-w-[10rem]" disabled={loading}>
 			{#if loading}

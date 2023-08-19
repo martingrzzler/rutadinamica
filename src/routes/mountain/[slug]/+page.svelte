@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import Add from '$lib/icons/Add.svelte';
 	import Summit from '$lib/icons/Summit.svelte';
+	import WhatsApp from '$lib/icons/WhatsApp.svelte';
 	import { format } from 'timeago.js';
 
 	export let data;
@@ -55,6 +56,19 @@
 					</div>
 				</div>
 				<div class="collapse-content">
+					{#if post.profiles.whatsapp}
+						<div class="flex justify-end">
+							<a class="btn mb-3 ml-auto" href={`tel:${post.profiles.whatsapp}`}>
+								<WhatsApp className={'w-6 h-6'} />
+								Contact
+								{#if post.profiles.name}
+									{post.profiles.name.split(' ')[0]}
+								{:else}
+									Me
+								{/if}
+							</a>
+						</div>
+					{/if}
 					<div class="flex gap-2 mb-3 text-gray-600">
 						<Summit className="w-5 h-5 fill-gray-600" />
 						<p>{format(post.date, 'en_US')}</p>

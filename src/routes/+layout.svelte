@@ -2,6 +2,7 @@
 	import '../app.css';
 
 	export let data;
+	console.log(data);
 </script>
 
 <div class="h-screen overflow-hidden flex flex-col bg-base-300">
@@ -12,7 +13,10 @@
 				<div class="dropdown dropdown-end">
 					<button type="button" tabindex="0" class="btn btn-ghost btn-circle avatar">
 						<div class="w-10 rounded-full">
-							<img alt="placeholder profile" src="/placeholder-profile.png" />
+							<img
+								alt="placeholder profile"
+								src={data.profile.avatar_url ? data.profile.avatar_url : '/placeholder-profile.png'}
+							/>
 						</div>
 					</button>
 					<ul

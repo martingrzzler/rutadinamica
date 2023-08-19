@@ -10,6 +10,7 @@ interface Post {
 	profiles: {
 		name?: string;
 		avatar_url?: string;
+		whatsapp?: string;
 	};
 }
 
@@ -38,9 +39,9 @@ export async function load({ locals: { supabase }, params }) {
 		image_url,
 		profiles (
 			name,
-			avatar_url
-		)
-		`
+			avatar_url,
+			whatsapp
+		)`
 		)
 		.eq('mountain_id', mountain.id)
 		.order('updated_at', { ascending: false })
@@ -63,7 +64,6 @@ export async function load({ locals: { supabase }, params }) {
 			avatar_url = publicUrl;
 		}
 
-		console.log(post.image_url);
 		if (post.image_url) {
 			const {
 				data: { publicUrl }
