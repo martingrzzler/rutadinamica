@@ -1,7 +1,7 @@
 import { redirect, type Actions, fail } from '@sveltejs/kit';
 
-export async function load({ parent, locals: { supabase } }) {
-	const { session } = await parent();
+export async function load({ locals: { supabase, getSession } }) {
+	const session = await getSession();
 
 	if (!session) {
 		throw redirect(303, '/signin');
@@ -28,8 +28,15 @@ export async function load({ parent, locals: { supabase } }) {
 	}
 
 	return {
-		profile: data
+		profile: data,
+		session
 	};
+}
+
+interface Update {
+	name?: string;
+	whatsapp?: string;
+	avatar_url?: string;
 }
 
 export const actions: Actions = {
@@ -37,6 +44,7 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const name = formData.get('name') as string;
 		const whatsapp = formData.get('whatsapp') as string;
+		const avatar_url = formData.get('avatar_url') as string | undefined;
 
 		if (!name.trim()) {
 			return fail(400, { error: 'Name cannot be empty.' });
@@ -48,28 +56,16 @@ export const actions: Actions = {
 			return fail(401, { error: 'Not authenticated.' });
 		}
 
-		const avatar = formData.get('avatar') as File | undefined;
-		let avatar_url: string | undefined = undefined;
+		const update: Update = {
+			name,
+			whatsapp
+		};
 
-		if (avatar?.size) {
-			const { error, data } = await supabase.storage
-				.from('images')
-				.upload(`${session.user.id}/avatar.${avatar.name.split('.').at(-1)}`, avatar, {
-					upsert: true
-				});
-
-			if (error) {
-				console.log(error);
-				return fail(500, { error: 'Server error. Try again later.' });
-			}
-
-			avatar_url = data.path;
+		if (avatar_url) {
+			update.avatar_url = avatar_url;
 		}
 
-		const { error } = await supabase
-			.from('profiles')
-			.update({ name, avatar_url, whatsapp })
-			.eq('id', session.user.id);
+		const { error } = await supabase.from('profiles').update(update).eq('id', session.user.id);
 
 		if (error) {
 			return fail(500, { error: 'Server error. Try again later.' });

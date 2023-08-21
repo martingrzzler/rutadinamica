@@ -2,7 +2,6 @@
 	import '../app.css';
 
 	export let data;
-	console.log(data);
 </script>
 
 <div class="h-screen overflow-hidden flex flex-col bg-base-300">

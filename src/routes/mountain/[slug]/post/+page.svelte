@@ -24,6 +24,7 @@
 </script>
 
 <form
+	enctype="multipart/form-data"
 	method="POST"
 	use:enhance={() => {
 		loading = true;

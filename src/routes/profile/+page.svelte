@@ -1,11 +1,19 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 
 	export let data;
 	export let form;
 
+	let { supabase, session } = data;
+
 	let loading = false;
+	let error: string | null = null;
+	$: if (form?.error) {
+		error = form.error;
+	}
+
 	let preloadLink = '';
 	let files: FileList | null = null;
 	let userName = data.profile?.name || '';
@@ -18,6 +26,38 @@
 		const file = files![0];
 		preloadLink = URL.createObjectURL(file);
 	}
+
+	const submit: SubmitFunction = async ({ cancel, formData }) => {
+		loading = true;
+
+		const avatar = files?.item(0);
+
+		if (avatar?.size) {
+			const { error: uploadErr, data: uploadData } = await data.supabase.storage
+				.from('images')
+				.upload(`${session.user.id}/avatar.${avatar.name.split('.').at(-1)}`, avatar, {
+					upsert: true
+				});
+
+			if (uploadErr) {
+				error = uploadErr.message;
+				loading = false;
+				cancel();
+				return;
+			}
+
+			formData.set('avatar_url', uploadData.path);
+			formData.delete('avatar');
+		}
+
+		return async ({ update }) => {
+			await update({
+				reset: false
+			});
+
+			loading = false;
+		};
+	};
 
 	onMount(() => {
 		return () => {
@@ -48,19 +88,10 @@
 		alt="Profile"
 	/>
 	<form
+		enctype="multipart/form-data"
 		class="flex flex-col items-center gap-4"
 		action="?/update"
-		use:enhance={() => {
-			loading = true;
-
-			return async ({ update }) => {
-				await update({
-					reset: false
-				});
-
-				loading = false;
-			};
-		}}
+		use:enhance={submit}
 		method="POST"
 	>
 		<input
