@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 
 	export let form;
+	export let data;
+	let { supabase, session } = data;
 
 	let loading = false;
+	let error: string | null = null;
+	$: if (form?.error) {
+		error = form.error;
+	}
 	let files: FileList | null = null;
 	let preloadLink = '';
 
@@ -16,6 +23,33 @@
 		preloadLink = URL.createObjectURL(file);
 	}
 
+	const submit: SubmitFunction = async ({ cancel, formData }) => {
+		loading = true;
+
+		const image = files?.item(0);
+
+		if (image?.size) {
+			const { error: uploadErr, data: uploadData } = await data.supabase.storage
+				.from('images')
+				.upload(`${session.user.id}/${image.name}`, image);
+
+			if (uploadErr) {
+				error = uploadErr.message;
+				loading = false;
+				cancel();
+				return;
+			}
+
+			formData.set('image_url', uploadData.path);
+			formData.delete('image');
+		}
+
+		return async ({ update }) => {
+			await update();
+			loading = false;
+		};
+	};
+
 	onMount(() => {
 		return () => {
 			URL.revokeObjectURL(preloadLink);
@@ -26,19 +60,12 @@
 <form
 	enctype="multipart/form-data"
 	method="POST"
-	use:enhance={() => {
-		loading = true;
-
-		return async ({ update }) => {
-			await update();
-			loading = false;
-		};
-	}}
+	use:enhance={submit}
 	class="px-7 flex flex-col items-center gap-4 mt-4 overflow-auto flex-1 pb-10"
 >
-	{#if form?.error}
+	{#if error}
 		<div class="alert alert-error">
-			{form.error}
+			{error}
 		</div>
 	{/if}
 	<img

@@ -1,5 +1,26 @@
 import { fail, type Actions, redirect } from '@sveltejs/kit';
 
+export async function load({ locals: { getSession } }) {
+	const session = await getSession();
+
+	if (!session) {
+		throw redirect(303, '/signin');
+	}
+
+	return {
+		session
+	};
+}
+
+interface Update {
+	mountain_id: string;
+	profile_id: string;
+	content: string;
+	route: string;
+	date: string;
+	image_url?: string;
+}
+
 export const actions: Actions = {
 	default: async ({ request, params, locals: { supabase, getSession } }) => {
 		const session = await getSession();
@@ -13,7 +34,7 @@ export const actions: Actions = {
 		const content = formData.get('content') as string;
 		const route = formData.get('route') as string;
 		const date = formData.get('date') as string;
-		const image = formData.get('image') as File;
+		const image_url = formData.get('image_url') as string | undefined;
 
 		if (content.trim() === '') {
 			return fail(400, { error: 'Content cannot be empty' });
@@ -49,33 +70,19 @@ export const actions: Actions = {
 			return fail(401, { error: 'Unauthorized' });
 		}
 
-		let image_url: string | undefined = undefined;
-
-		if (image?.size) {
-			console.log(image);
-			console.log(image.name);
-			console.log(image.type);
-			console.log(image.size);
-			const { error, data } = await supabase.storage
-				.from('images')
-				.upload(`${session.user.id}/${image.name}`, image);
-
-			if (error) {
-				console.log(error);
-				return fail(500, { error: 'Server error. Try again later.' });
-			}
-
-			image_url = data.path;
-		}
-
-		const { error: error2 } = await supabase.from('posts').insert({
+		const update: Update = {
 			mountain_id: mountain.id,
 			profile_id: profile.id,
 			content,
 			route,
-			date,
-			image_url
-		});
+			date
+		};
+
+		if (image_url) {
+			update.image_url = image_url;
+		}
+
+		const { error: error2 } = await supabase.from('posts').insert(update);
 
 		if (error2) {
 			return fail(500, { error: 'Server error. Try again later.' });

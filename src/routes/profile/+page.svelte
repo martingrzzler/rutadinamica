@@ -67,9 +67,9 @@
 </script>
 
 <div class="flex flex-col items-center py-6 px-7 gap-4">
-	{#if form?.error}
+	{#if error}
 		<div class="alert alert-error">
-			{form.error}
+			{error}
 		</div>
 	{/if}
 
