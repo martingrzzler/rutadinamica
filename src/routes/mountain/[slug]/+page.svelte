@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { t } from '$lib/i18n';
+	import { locale, t } from '$lib/i18n';
 	import Add from '$lib/icons/Add.svelte';
 	import Summit from '$lib/icons/Summit.svelte';
 	import WhatsApp from '$lib/icons/WhatsApp.svelte';
@@ -36,7 +36,7 @@
 					<div class="text-lg font-medium">{post.route}</div>
 					<div class="flex gap-2 items-center">
 						<div class="text-sm">
-							{format(post.updated_at, 'en_US')}
+							{format(post.updated_at, $locale)}
 						</div>
 						<div class="avatar placeholder">
 							{#if post.profiles.avatar_url}
@@ -69,7 +69,7 @@
 					{/if}
 					<div class="flex gap-2 mb-3 text-gray-600">
 						<Summit className="w-5 h-5 fill-gray-600" />
-						<p>{format(post.date, 'en_US')}</p>
+						<p>{format(post.date, $locale)}</p>
 					</div>
 					{#if post.image_url}
 						<img

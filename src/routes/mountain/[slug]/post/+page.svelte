@@ -110,7 +110,7 @@
 		placeholder={$t('mountain.post.content')}
 		required
 	/>
-	<button class="btn btn-primary min-w-[10rem]">
+	<button disabled={loading} class="btn btn-primary min-w-[10rem]">
 		{#if loading}
 			<span class="loading loading-ring loading-lg" />
 		{:else}

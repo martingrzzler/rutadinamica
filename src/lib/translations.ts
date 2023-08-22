@@ -19,8 +19,8 @@ export default {
 		'mountain.post.content': 'How was the climb?'
 	},
 	es: {
-		signOut: 'Ingresar',
-		signIn: 'Salir',
+		signOut: 'Salir',
+		signIn: 'Ingresar',
 		post: 'Publicar',
 		profile: 'Perfil',
 		update: 'Actualizar',

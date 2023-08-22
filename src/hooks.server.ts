@@ -1,4 +1,5 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+import { initialize } from '$lib/initTimeago';
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
 import type { Handle } from '@sveltejs/kit';
 
@@ -16,13 +17,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return session;
 	};
 
+	initialize();
+
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
 			return name === 'content-range';
 		}
 	});
 };
-
-export function handleError({ error }) {
-	console.error(error);
-}
