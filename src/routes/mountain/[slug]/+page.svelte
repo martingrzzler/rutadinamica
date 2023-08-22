@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { t } from '$lib/i18n';
 	import Add from '$lib/icons/Add.svelte';
 	import Summit from '$lib/icons/Summit.svelte';
 	import WhatsApp from '$lib/icons/WhatsApp.svelte';
@@ -24,7 +25,7 @@
 		href={$page.url.pathname + '/post'}
 		class="btn btn-secondary flex items-center self-end max-w-[10rem]"
 	>
-		<div>Post</div>
+		<div>{$t('post')}</div>
 		<Add className="w-5 h-5 -translate-y-[1px]" />
 	</a>
 	<div class="flex-grow overflow-auto self-stretch">
@@ -60,12 +61,9 @@
 						<div class="flex justify-end">
 							<a class="btn mb-3 ml-auto" href={`tel:${post.profiles.whatsapp}`}>
 								<WhatsApp className={'w-6 h-6'} />
-								Contact
-								{#if post.profiles.name}
-									{post.profiles.name.split(' ')[0]}
-								{:else}
-									Me
-								{/if}
+								{$t('mountain.contact', {
+									name: post.profiles.name ? post.profiles.name.split(' ')[0] : 'Me'
+								})}
 							</a>
 						</div>
 					{/if}

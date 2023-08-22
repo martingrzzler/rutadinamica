@@ -27,7 +27,6 @@ export const actions: Actions = {
 		}
 
 		return {
-			message: 'Please check your email for a magic link to log into the website.',
 			success: true
 		};
 	}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { t } from '$lib/i18n';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 
@@ -84,7 +85,7 @@
 	/>
 	<input
 		disabled={loading}
-		placeholder="Which route did you climb?"
+		placeholder={$t('mountain.post.route')}
 		class="input shrink-0 w-full"
 		type="text"
 		name="route"
@@ -92,9 +93,12 @@
 	/>
 	<input
 		disabled={loading}
-		placeholder="When did you climb it?"
+		placeholder={$t('mountain.post.date')}
+		on:focus={function () {
+			this.type = 'date';
+		}}
 		class="input shrink-0 w-full"
-		type="date"
+		type="text"
 		name="date"
 		required
 	/>
@@ -103,14 +107,14 @@
 		class="textarea shrink-0 w-full"
 		rows="10"
 		name="content"
-		placeholder="Post your experience"
+		placeholder={$t('mountain.post.content')}
 		required
 	/>
 	<button class="btn btn-primary min-w-[10rem]">
 		{#if loading}
 			<span class="loading loading-ring loading-lg" />
 		{:else}
-			Post
+			{$t('post')}
 		{/if}
 	</button>
 </form>

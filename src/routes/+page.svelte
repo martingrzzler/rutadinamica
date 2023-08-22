@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/i18n';
+
 	export let data;
 
 	let search = '';
@@ -12,12 +14,12 @@
 
 <div class="flex flex-col gap-4 flex-grow overflow-hidden items-center mt-4">
 	<h1 class="text-center">
-		Find current conditions of the mountains in the Cordillera Blanca posted by fellow climbers.
+		{$t('homepage.welcome')}
 	</h1>
 	<input
 		type="text"
 		bind:value={search}
-		placeholder="Search mountain..."
+		placeholder={$t('homepage.search')}
 		class="input input-bordered w-full shrink-0 max-w-xs"
 	/>
 	<div class="flex flex-wrap gap-4 flex-grow overflow-auto px-4 pb-10">

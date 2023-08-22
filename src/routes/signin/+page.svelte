@@ -1,5 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { t } from '$lib/i18n';
 
 	export let form;
 
@@ -11,7 +12,7 @@
 		<span class="loading loading-ring loading-lg" />
 	{:else if form?.success}
 		<div class="alert alert-success">
-			Success! {form?.message}
+			{$t('signIn.success')}
 		</div>
 	{:else}
 		{#if form?.error}
@@ -33,12 +34,12 @@
 		>
 			<input
 				value={form?.email ?? ''}
-				placeholder="Your Email"
+				placeholder={$t('signIn.email')}
 				class="input w-full max-w-xs"
 				type="email"
 				name="email"
 			/>
-			<button disabled={loading} type="submit" class="btn btn-primary">Receive Link</button>
+			<button disabled={loading} type="submit" class="btn btn-primary">{$t('signIn.link')}</button>
 		</form>
 	{/if}
 </div>

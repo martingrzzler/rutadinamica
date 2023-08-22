@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
+	import { t } from '$lib/i18n';
 
 	export let data;
 	export let form;
@@ -105,7 +106,7 @@
 		/>
 		<input
 			disabled={loading}
-			placeholder="Add your name"
+			placeholder={$t('profile.name')}
 			class="input w-full max-w-xs"
 			type="text"
 			name="name"
@@ -113,7 +114,7 @@
 		/>
 		<input
 			disabled={loading}
-			placeholder="WhatsApp number (optional)"
+			placeholder={$t('profile.whatsapp')}
 			class="input w-full max-w-xs"
 			type="text"
 			name="whatsapp"
@@ -123,7 +124,7 @@
 			{#if loading}
 				<span class="loading loading-ring loading-lg" />
 			{:else}
-				Update
+				{$t('update')}
 			{/if}
 		</button>
 	</form>
