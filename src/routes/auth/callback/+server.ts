@@ -4,7 +4,12 @@ export const GET = async ({ url, locals: { supabase, getSession } }) => {
 	const code = url.searchParams.get('code');
 
 	if (code) {
-		await supabase.auth.exchangeCodeForSession(code);
+		const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+		if (error) {
+			console.error('Error exhaning code for session', error);
+			throw redirect(303, '/signin');
+		}
 	}
 
 	const session = await getSession();
