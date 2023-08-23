@@ -13,7 +13,7 @@
 </script>
 
 <div class="flex flex-col gap-4 flex-grow overflow-hidden items-center mt-4">
-	<h1 class="text-center">
+	<h1 class="text-center mx-4">
 		{$t('homepage.welcome')}
 	</h1>
 	<input
