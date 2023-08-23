@@ -9,7 +9,7 @@ export async function load({ locals: { supabase, getSession } }) {
 
 	const { data, error } = await supabase
 		.from('profiles')
-		.select('name, avatar_url, whatsapp')
+		.select('name, avatar_url, whatsapp, updated_at')
 		.eq('id', session.user.id)
 		.single();
 
@@ -22,7 +22,8 @@ export async function load({ locals: { supabase, getSession } }) {
 			profile: {
 				name: data.name,
 				whatsapp: data.whatsapp,
-				avatar_url: supabase.storage.from('images').getPublicUrl(data.avatar_url).data.publicUrl
+				avatar_url: supabase.storage.from('images').getPublicUrl(data.avatar_url).data.publicUrl,
+				updated_at: data.updated_at
 			}
 		};
 	}

@@ -81,11 +81,13 @@
 	{/if}
 	<img
 		class="rounded-xl shadow w-full max-w-sm max-h-96 object-cover"
-		src={preloadLink
-			? preloadLink
-			: data.profile?.avatar_url
-			? data.profile?.avatar_url
-			: 'placeholder-profile.png'}
+		src={`${
+			preloadLink
+				? preloadLink
+				: data.profile?.avatar_url
+				? data.profile?.avatar_url
+				: 'placeholder-profile.png'
+		}?${data.profile.updated_at}`}
 		alt="Profile"
 	/>
 	<form
