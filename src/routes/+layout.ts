@@ -20,7 +20,7 @@ export const load = async ({ fetch, data }) => {
 	if (session) {
 		const { data: profile, error: err } = await supabase
 			.from('profiles')
-			.select('avatar_url')
+			.select('avatar_url, updated_at')
 			.eq('id', session.user.id)
 			.single();
 
@@ -28,14 +28,18 @@ export const load = async ({ fetch, data }) => {
 			throw error(500, err.message);
 		}
 
-		return {
-			profile: {
-				avatar_url: supabase.storage.from('images').getPublicUrl(profile.avatar_url).data.publicUrl
-			},
-			session,
-			supabase
-		};
+		if (profile.avatar_url) {
+			return {
+				profile: {
+					...profile,
+					avatar_url: supabase.storage.from('images').getPublicUrl(profile.avatar_url).data
+						.publicUrl
+				},
+				session,
+				supabase
+			};
+		} else {
+			return { supabase, session };
+		}
 	}
-
-	return { supabase, session };
 };

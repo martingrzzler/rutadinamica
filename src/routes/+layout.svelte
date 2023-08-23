@@ -23,7 +23,9 @@
 						<div class="w-10 rounded-full">
 							<img
 								alt="placeholder profile"
-								src={data.profile.avatar_url ? data.profile.avatar_url : '/placeholder-profile.png'}
+								src={data.profile?.avatar_url
+									? `${data.profile.avatar_url}?${data.profile.updated_at}`
+									: '/placeholder-profile.png'}
 							/>
 						</div>
 					</button>
