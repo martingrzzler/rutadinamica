@@ -18,8 +18,9 @@
 				{/each}
 			</select>
 			{#if data.session}
-				<div class="dropdown dropdown-end">
-					<button type="button" tabindex="0" class="btn btn-ghost btn-circle avatar">
+				<details class="dropdown dropdown-end">
+					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+					<summary tabindex="0" class="btn btn-ghost btn-circle avatar">
 						<div class="w-10 rounded-full">
 							<img
 								alt="placeholder profile"
@@ -28,7 +29,7 @@
 									: '/placeholder-profile.png'}
 							/>
 						</div>
-					</button>
+					</summary>
 					<ul
 						class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
 					>
@@ -37,7 +38,7 @@
 							<a href="/signout">{$t('signOut')}</a>
 						</li>
 					</ul>
-				</div>
+				</details>
 			{:else}
 				<a href="/signin" class="btn btn-primary">{$t('signIn')}</a>
 			{/if}

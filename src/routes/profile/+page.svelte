@@ -34,7 +34,7 @@
 		const avatar = files?.item(0);
 
 		if (avatar?.size) {
-			const { error: uploadErr, data: uploadData } = await data.supabase.storage
+			const { error: uploadErr, data: uploadData } = await data.supabase!.storage
 				.from('images')
 				.upload(`${session.user.id}/avatar.${avatar.name.split('.').at(-1)}`, avatar, {
 					upsert: true
