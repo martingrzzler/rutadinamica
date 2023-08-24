@@ -24,7 +24,10 @@
 	/>
 	<div class="flex flex-wrap gap-4 flex-grow overflow-auto px-4 pb-10">
 		{#each filteredMountains as mountain}
-			<a href={`/mountain/${mountain.slug}`} class="card w-full h-96 bg-base-100 shadow-xl">
+			<a
+				href={`/mountain/${mountain.slug}`}
+				class="card w-full max-w-sm h-96 bg-base-100 shadow-xl"
+			>
 				<figure>
 					<img
 						class="object-cover w-full h-72"

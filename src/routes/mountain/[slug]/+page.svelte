@@ -30,7 +30,7 @@
 	</a>
 	<div class="flex-grow overflow-auto self-stretch">
 		{#each data.posts as post}
-			<div class="collapse bg-base-100 mt-4">
+			<div class="collapse bg-base-100 mt-4 max-w-xl mx-auto">
 				<input type="checkbox" />
 				<div class="collapse-title w-full flex justify-between items-center px-4">
 					<div class="text-lg font-medium">{post.route}</div>
