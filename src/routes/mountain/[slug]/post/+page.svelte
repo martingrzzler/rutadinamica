@@ -14,35 +14,39 @@
 		error = form.error;
 	}
 	let files: FileList | null = null;
-	let preloadLink = '';
+	let preloadLinks: string[] = [];
 
-	function onFileChange() {
-		if (files?.length === 0) {
+	function onFilesChange() {
+		if (!files || files?.length === 0) {
 			return;
 		}
-		const file = files![0];
-		preloadLink = URL.createObjectURL(file);
+
+		for (const file of files) {
+			preloadLinks.push(URL.createObjectURL(file));
+		}
+		preloadLinks = [...preloadLinks];
 	}
 
 	const submit: SubmitFunction = async ({ cancel, formData }) => {
 		loading = true;
 
-		const image = files?.item(0);
+		const images = files;
 
-		if (image?.size) {
-			const { error: uploadErr, data: uploadData } = await data.supabase.storage
-				.from('images')
-				.upload(`${session.user.id}/${image.name}`, image);
+		if (images && images.length > 0) {
+			for (const image of images) {
+				const { error: imageErr, data: imageData } = await data
+					.supabase!.storage.from('images')
+					.upload(`${session.user.id}/${image.name}`, image);
 
-			if (uploadErr) {
-				error = uploadErr.message;
-				loading = false;
-				cancel();
-				return;
+				if (imageErr) {
+					error = imageErr.message;
+					loading = false;
+					cancel();
+					return;
+				}
+
+				formData.append('image_urls', imageData.path);
 			}
-
-			formData.set('image_url', uploadData.path);
-			formData.delete('image');
 		}
 
 		return async ({ update }) => {
@@ -53,7 +57,9 @@
 
 	onMount(() => {
 		return () => {
-			URL.revokeObjectURL(preloadLink);
+			for (const preloadLink of preloadLinks) {
+				URL.revokeObjectURL(preloadLink);
+			}
 		};
 	});
 </script>
@@ -69,18 +75,27 @@
 			{error}
 		</div>
 	{/if}
-	<img
-		class="rounded-xl shadow w-full max-w-sm max-h-96 object-cover"
-		src={preloadLink ? preloadLink : '/mountain.png'}
-		alt="Mountain placeholder"
-	/>
+	<div class="carousel rounded-box shadow max-w-sm shrink-0 max-h-[30rem]">
+		{#if preloadLinks.length === 0}
+			<div class="carousel-item w-full">
+				<img class="object-cover w-full" src="/mountain.png" alt="Mountain placeholder" />
+			</div>
+		{:else}
+			{#each preloadLinks as preloadLink}
+				<div class="carousel-item w-full">
+					<img class="object-cover w-full" src={preloadLink} alt="post" />
+				</div>
+			{/each}
+		{/if}
+	</div>
 	<input
 		type="file"
 		class="shrink-0 file-input w-full file-input-secondary"
 		accept="image/*"
 		name="image"
 		bind:files
-		on:change={onFileChange}
+		on:change={onFilesChange}
+		multiple
 		disabled={loading}
 	/>
 	<input

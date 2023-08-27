@@ -18,7 +18,7 @@ interface Update {
 	content: string;
 	route: string;
 	date: string;
-	image_url?: string;
+	image_urls?: string[];
 }
 
 export const actions: Actions = {
@@ -34,7 +34,7 @@ export const actions: Actions = {
 		const content = formData.get('content') as string;
 		const route = formData.get('route') as string;
 		const date = formData.get('date') as string;
-		const image_url = formData.get('image_url') as string | undefined;
+		const image_urls = formData.getAll('image_urls') as string[] | undefined;
 
 		if (content.trim() === '') {
 			return fail(400, { error: 'Content cannot be empty' });
@@ -78,8 +78,8 @@ export const actions: Actions = {
 			date
 		};
 
-		if (image_url) {
-			update.image_url = image_url;
+		if (image_urls) {
+			update.image_urls = image_urls;
 		}
 
 		const { error: error2 } = await supabase.from('posts').insert(update);
