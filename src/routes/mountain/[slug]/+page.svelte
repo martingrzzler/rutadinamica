@@ -28,7 +28,7 @@
 		<div>{$t('post')}</div>
 		<Add className="w-5 h-5 -translate-y-[1px]" />
 	</a>
-	<div class="flex-grow overflow-auto self-stretch">
+	<div class="flex-grow overflow-auto self-stretch pb-12">
 		{#each data.posts as post}
 			<div class="collapse bg-base-100 mt-4 max-w-xl mx-auto">
 				<input type="checkbox" />
