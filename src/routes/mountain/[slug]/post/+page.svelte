@@ -47,6 +47,7 @@
 				}
 
 				formData.append('image_urls', imageData.path);
+				formData.delete('image');
 			}
 		}
 
