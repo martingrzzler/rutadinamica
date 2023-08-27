@@ -6,7 +6,7 @@ interface Post {
 	route: string;
 	updated_at: string;
 	date: string;
-	image_url?: string;
+	image_urls?: string[];
 	profiles: {
 		name?: string;
 		avatar_url?: string;
@@ -36,7 +36,7 @@ export async function load({ locals: { supabase }, params }) {
 		route,
 		updated_at,
 		date,
-		image_url,
+		image_urls,
 		profiles (
 			name,
 			avatar_url,
@@ -54,7 +54,7 @@ export async function load({ locals: { supabase }, params }) {
 
 	const postsWithPublicUrl = posts.map((post: Post) => {
 		let avatar_url;
-		let image_url;
+		let image_urls;
 
 		if (post.profiles.avatar_url) {
 			const {
@@ -64,17 +64,19 @@ export async function load({ locals: { supabase }, params }) {
 			avatar_url = publicUrl;
 		}
 
-		if (post.image_url) {
-			const {
-				data: { publicUrl }
-			} = supabase.storage.from('images').getPublicUrl(post.image_url);
+		if (post.image_urls) {
+			image_urls = post.image_urls.map((image_url) => {
+				const {
+					data: { publicUrl }
+				} = supabase.storage.from('images').getPublicUrl(image_url);
 
-			image_url = publicUrl;
+				return publicUrl;
+			});
 		}
 
 		return {
 			...post,
-			image_url,
+			image_urls,
 			profiles: {
 				...post.profiles,
 				avatar_url

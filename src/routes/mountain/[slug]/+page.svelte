@@ -71,12 +71,14 @@
 						<Summit className="w-5 h-5 fill-gray-600" />
 						<p>{format(post.date, $locale)}</p>
 					</div>
-					{#if post.image_url}
-						<img
-							class="rounded-xl mb-3 shadow w-full max-w-sm max-h-96 object-cover"
-							src={post.image_url}
-							alt="Post"
-						/>
+					{#if post.image_urls}
+						<div class="carousel rounded-box shadow max-w-sm shrink-0 max-h-[30rem]">
+							{#each post.image_urls as imageUrl}
+								<div class="carousel-item w-full">
+									<img class="object-cover w-full" src={imageUrl} alt="post" />
+								</div>
+							{/each}
+						</div>
 					{/if}
 					<p class="whitespace-pre-wrap">
 						{post.content}
