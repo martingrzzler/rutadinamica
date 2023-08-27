@@ -14,6 +14,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@types/uuid": "^9.0.2",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.14",
@@ -37,6 +38,7 @@
 		"@supabase/auth-helpers-sveltekit": "^0.10.2",
 		"@supabase/supabase-js": "^2.32.0",
 		"timeago.js": "^4.0.2",
-		"tus-js-client": "^3.1.1"
+		"tus-js-client": "^3.1.1",
+		"uuid": "^9.0.0"
 	}
 }

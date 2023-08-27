@@ -3,6 +3,7 @@
 	import { t } from '$lib/i18n';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
+	import { v4 as uuidv4 } from 'uuid';
 
 	export let form;
 	export let data;
@@ -36,7 +37,7 @@
 			for (const image of images) {
 				const { error: imageErr, data: imageData } = await data
 					.supabase!.storage.from('images')
-					.upload(`${session.user.id}/${image.name}`, image);
+					.upload(`${session.user.id}/${uuidv4()}`, image);
 
 				if (imageErr) {
 					error = imageErr.message;
